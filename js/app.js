@@ -4,6 +4,7 @@ const btnSave = document.querySelector("#btnSave");
 
 btnSave.addEventListener("click", function (e) {
     // console.log(" I got clicked..");
+    let txtTitle = document.querySelector("#txtTitle");
     let txtNote = document.querySelector("#txtNote");
     let notes = localStorage.getItem("notes");
     if (notes == null) {
@@ -12,9 +13,14 @@ btnSave.addEventListener("click", function (e) {
     } else {
         notesObj = JSON.parse(notes);
     }
-    notesObj.push(txtNote.value);
+    let obj = {
+        txtTitle: txtTitle.value,
+        txtNote: txtNote.value
+    }
+    notesObj.push(obj);
     localStorage.setItem("notes", JSON.stringify(notesObj));
     // console.log(notesObj);
+    txtTitle.value = "";
     txtNote.value = "";
     showNotes();
 });
@@ -30,8 +36,8 @@ function showNotes() {
     notesObj.forEach(function (element, index) {
         html += `<div class="noteCard card mx-4 my-3" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">${index + 1}</h5>
-                        <p class="card-text"> ${element}</p>
+                        <h5 class="card-title">${index + 1} ${"."} ${element.txtTitle}</h5>
+                        <p class="card-text"> ${element.txtNote}</p>
                         <button id="${index}" onclick="deleteNotes(this.id)"  class="btn btn-primary">Delete</button>
                     </div>
                 </div>`;
@@ -59,7 +65,7 @@ function deleteNotes(index) {
 
 let searchInput = document.querySelector("#searchInput");
 searchInput.addEventListener("input", function (e) {
-    
+
     let inputTxt = searchInput.value;
 
     let card = document.querySelectorAll(".noteCard");
